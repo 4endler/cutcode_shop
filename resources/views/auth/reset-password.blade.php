@@ -1,22 +1,42 @@
 @extends('layouts.auth')
-@section('title', 'Забыли пароль?')
+@section('title', 'Задать новый пароль')
 @section('content')
-    <x-forms.auth-forms title="Забыли пароль?" action="#"  method="POST">
+    <x-forms.auth-forms title="Задать новый пароль" action="{{route('password.update')}}"  method="POST">
 
-        <x-forms.text-input type="email" name="email" placeholder="Электронная почта" riquired="true" :isError="$errors->has('email')" />
+        <input type="hidden" value="{{$token}}" name="token">
+        <x-forms.text-input 
+            type="email" 
+            name="email" 
+            placeholder="Электронная почта" 
+            value="{{request('email')}}"
+            riquired="true" 
+            :isError="$errors->has('email')" />
         @error('email')
             <x-forms.error :message="$message" />
         @enderror
 
-        <x-forms.primary-button>Отправить</x-forms.primary-button>
+        <x-forms.text-input 
+            type="password" 
+            name="password" 
+            placeholder="Пароль" 
+            riquired="true" 
+            :isError="$errors->has('password')" />
+        @error('password')
+            <x-forms.error :message="$message" />
+        @enderror
+        
+        <x-forms.text-input 
+            type="password" 
+            name="password_confirmation" 
+            placeholder="Повторите пароль" 
+            riquired="true" 
+            :isError="$errors->has('password_confirmation')" />
+        @error('password_confirmation')
+            <x-forms.error :message="$message" />
+        @enderror
 
-        <x-slot:buttons>
-            <div class="space-y-3 mt-5">
-                <div class="text-xxs md:text-xs">
-                    <a href="{{route('login')}}" class="text-white hover:text-white/70 font-bold">Вспомнил пароль</a>
-                </div>
-            </div>
-        </x-slot:buttons>
+        <x-forms.primary-button>Сохранить</x-forms.primary-button>
+
     </x-forms.auth-forms>
 
 

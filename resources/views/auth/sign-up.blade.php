@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 @section('title', 'Регистрация')
 @section('content')
-    <x-forms.auth-forms title="Регистрация" action="#"  method="POST">
+    <x-forms.auth-forms title="Регистрация" action="{{route('store')}}"  method="POST">
         <x-forms.text-input 
             type="text" 
             name="name" 
