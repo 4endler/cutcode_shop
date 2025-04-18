@@ -6,7 +6,6 @@
             type="email" 
             name="email" 
             placeholder="Электронная почта" 
-            riquired="true" 
             value="{{old('email')}}"
             :isError="$errors->has('email')" />
         @error('email')
@@ -17,7 +16,6 @@
             type="password" 
             name="password" 
             placeholder="Пароль" 
-            riquired="true" 
             :isError="$errors->has('email')" />
 
         <x-forms.primary-button>Войти</x-forms.primary-button>
