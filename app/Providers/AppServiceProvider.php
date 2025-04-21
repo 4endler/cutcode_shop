@@ -52,12 +52,23 @@ class AppServiceProvider extends ServiceProvider
                 });
         });
 
+        RateLimiter::for('auth', function (Request $request) {
+            return Limit::perMinute(5)
+                ->by($request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'message' => 'Слишком много попыток входа. Попробуйте через 1 минуту.'
+                    ], 429, $headers);
+                });
+        });
+
         Password::defaults(function () {
             return Password::min(8)
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-                ->uncompromised();
+                // ->mixedCase()
+                // ->numbers()
+                // ->symbols()
+                // ->uncompromised()
+                ;
         });
     }
 }

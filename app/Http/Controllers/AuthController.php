@@ -21,6 +21,8 @@ class AuthController extends Controller
 {
     public function index()
     {
+        // flash()->info('FSLSAKSDK');
+        // return redirect()->route('home');
         return view('auth.index');
     }
     public function signUp()
@@ -71,10 +73,13 @@ class AuthController extends Controller
         $status = Password::sendResetLink(
             $request->only('email')
         );
-        //TODO 3rd lesson message
-        return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['message' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+
+        if ($status === Password::RESET_LINK_SENT) {
+            flash()->info(__($status));
+            return back();
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 
     public function resetPassword(string $token)
@@ -95,8 +100,12 @@ class AuthController extends Controller
                 event(new PasswordReset($user));
             }
         );
-        return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('message', __($status))
-                    : back()->withErrors(['email' => [__($status)]]);
+
+        if ($status === Password::PASSWORD_RESET) {
+            flash()->info(__($status));
+            return redirect()->route('login');
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 }
