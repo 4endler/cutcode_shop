@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 @section('title', 'Забыли пароль?')
 @section('content')
-    <x-forms.auth-forms title="Забыли пароль?" action="{{route('password.email')}}"  method="POST">
+    <x-forms.auth-forms title="Забыли пароль?" action="{{route('forgot.handle')}}"  method="POST">
 
         <x-forms.text-input type="email" name="email" placeholder="Электронная почта" riquired="true" :isError="$errors->has('email')" />
         @error('email')

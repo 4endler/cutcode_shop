@@ -17,6 +17,8 @@ class ProductFactory extends Factory
             'brand_id' => Brand::query()->inRandomOrder()->first()->id,
             'thumbnail' => $this->faker->fixturesImage('products', 'images/products'),
             'price' => $this->faker->numberBetween(100, 10000),
+            'on_home_page' => $this->faker->boolean(),
+            'rank'=>$this->faker->numberBetween(0, 100),
         ];
     }
 }

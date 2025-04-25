@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Faker\Factory;
 use Illuminate\Support\ServiceProvider;
+use Support\Testing\FakerImageProvider;
 
 class TestingServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,7 @@ class TestingServiceProvider extends ServiceProvider
             \Faker\Generator::class,
             function () {
                 $faker = Factory::create();
-                $faker->addProvider(new \App\Support\Testing\FakerImageProvider($faker));
+                $faker->addProvider(new FakerImageProvider($faker));
 
                 return $faker;
             });

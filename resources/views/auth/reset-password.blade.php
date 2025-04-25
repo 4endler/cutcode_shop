@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 @section('title', 'Задать новый пароль')
 @section('content')
-    <x-forms.auth-forms title="Задать новый пароль" action="{{route('password.update')}}"  method="POST">
+    <x-forms.auth-forms title="Задать новый пароль" action="{{route('reset.handle')}}"  method="POST">
 
         <input type="hidden" value="{{$token}}" name="token">
         <x-forms.text-input 

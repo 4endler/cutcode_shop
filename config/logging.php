@@ -1,6 +1,6 @@
 <?php
 
-use App\Logging\Telegram\TelegramLoggerHandler;
+use Support\Logging\Telegram\TelegramLoggerHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
