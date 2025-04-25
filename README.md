@@ -12,7 +12,7 @@
 - RateLimit for auth
 - Flash Messages
 - helpers (подключить в composer.json) (composer dump-autoload - пересобрать autoload)
-- tests
+- tests (env.testing в gitignore)
 - domains (composer.json -> autoload)
 - registerNewUserAction вынесли регистрацию в экшн (потому что может использоваться в других местах)
 - интерфейс для registerNewUserAction в contracts
