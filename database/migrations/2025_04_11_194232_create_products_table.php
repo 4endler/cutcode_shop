@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Brand;
-use App\Models\Category;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

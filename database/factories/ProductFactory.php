@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Brand;
+use Domain\Catalog\Models\Brand;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,7 +15,7 @@ class ProductFactory extends Factory
         return [
             'title' => ucfirst($this->faker->words(2, true)),
             'brand_id' => Brand::query()->inRandomOrder()->first()->id,
-            'thumbnail' => $this->faker->fixturesImage('products', 'images/products'),
+            'thumbnail' => $this->faker->fixturesImage('products', 'products'),
             'price' => $this->faker->numberBetween(100, 10000),
             'on_home_page' => $this->faker->boolean(),
             'rank'=>$this->faker->numberBetween(0, 100),

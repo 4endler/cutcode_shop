@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\Models\HasSlug;
-use App\Traits\Models\HasThumbnail;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Support\Casts\PriceCast;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
+use Illuminate\Database\Eloquent\Builder;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +24,14 @@ class Product extends Model
         'on_home_page', 'rank',
     ];
 
+    public function scopeFiltered(Builder $query, array $filters) 
+    {
+        
+    }
+    public function scopeSorted(Builder $query, array $filters) 
+    {
+
+    }
     protected function thumbnailDir(): string
     {
         return 'products';
@@ -39,4 +50,8 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+    protected $casts =[
+        'price' => PriceCast::class
+    ];
 }

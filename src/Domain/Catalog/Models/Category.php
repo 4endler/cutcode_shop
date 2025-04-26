@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Catalog\Models;
 
-use App\Traits\Models\HasSlug;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Product;
+use Database\Factories\CategoryFactory;
+use Domain\Catalog\QueryBuilders\CategoryQueryBuilder;
+use Support\Traits\Models\HasSlug;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,9 +21,13 @@ class Category extends Model
         'on_home_page', 'rank',
     ];
 
-    public function scopeHomePage(Builder $query)
+    protected static function newFactory()
     {
-        $query->where('on_home_page', true)->orderBy('rank')->limit(10);
+        return CategoryFactory::new();
+    }
+    public function newEloquentBuilder($query): CategoryQueryBuilder
+    {
+        return new CategoryQueryBuilder($query);
     }
     public function products(): BelongsToMany
     {

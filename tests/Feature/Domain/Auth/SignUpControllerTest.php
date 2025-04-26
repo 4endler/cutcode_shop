@@ -12,12 +12,31 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class SignUpControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected array $request;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->request = [
+            'name'=> 'test',
+            'email' => 'IcEj0@mail.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ];
+        
+    }
+
+    private function request(): TestResponse
+    {
+        return $this->post(action([SignUpController::class, 'handle']), $this->request);
+    }
     public function test_signup_page_success(): void
     {
         $this->get(action([SignUpController::class, 'page']))
@@ -31,24 +50,17 @@ class SignUpControllerTest extends TestCase
         Notification::fake();
         Event::fake();
 
-        $request = [
-            'name'=> 'test',
-            'email' => 'IcEj0@mail.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
-
-        $this->assertDatabaseMissing('users', ['email' => $request['email']]);
+        $this->assertDatabaseMissing('users', ['email' => $this->request['email']]);
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
         $response->assertValid();
-        $this->assertDatabaseHas('users', ['email' => $request['email']]);
+        $this->assertDatabaseHas('users', ['email' => $this->request['email']]);
 
         Event::assertDispatched(Registered::class);
         Event::assertListening(Registered::class, SendEmailNewUserListener::class);
 
         //Вызываем events вручную, чтобы проверить отправку уведомления
-        $user = User::query()->where('email', $request['email'])->first();
+        $user = User::query()->where('email', $this->request['email'])->first();
         $event = new Registered($user);
         $listener = new SendEmailNewUserListener();
         $listener->handle($event);
@@ -67,66 +79,41 @@ class SignUpControllerTest extends TestCase
     }
     public function test_handle_empty_name() : void
     {
-        $request = [
-            'name'=> '',
-            'email' => 'IcEj0@mail.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
+        $this->request['name'] = '';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['name']);
     }
     public function test_handle_empty_email() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => '',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
+        $this->request['email'] = '';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['email']);
     }
     public function test_handle_empty_password() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => 'IcEj0@mail.com',
-            'password' => '',
-            'password_confirmation' => 'asdf',
-        ];
+        $this->request['password'] = '';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['password']);
     }
     public function test_handle_empty_confirm_password() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => 'IcEj0@mail.com',
-            'password' => 'password',
-            'password_confirmation' => '',
-        ];
+        $this->request['password_confirmation'] = '';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['password']);
     }
     public function test_handle_email_not_valid() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => 'not-valie-email',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
+        $this->request['email'] = 'not-valid-email';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['email']);
     }
@@ -136,41 +123,27 @@ class SignUpControllerTest extends TestCase
             'email' => 'test@mail.com',
             'password' => bcrypt('password'),
         ]);
-        $request = [
-            'name'=> 'test',
-            'email' => $user->email,
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ];
+        $this->request['email'] = $user->email;
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['email']);
         
     }
     public function test_handle_password_invalid() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => 'IcEj0@mail.com',
-            'password' => 'pas',
-            'password_confirmation' => 'pas',
-        ];
+        $this->request['password'] = 'pas';
+        $this->request['password_confirmation'] = 'pas';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['password']);
     }
     public function test_handle_confirm_password_invalid() : void
     {
-        $request = [
-            'name'=> 'test',
-            'email' => 'IcEj0@mail.com',
-            'password' => 'password',
-            'password_confirmation' => 'password-invalid',
-        ];
+        $this->request['password_confirmation'] = 'password-not valid';
         
-        $response = $this->post(action([SignUpController::class, 'handle']), $request);
+        $response = $this->request();
 
         $response->assertInvalid(['password']);
     }

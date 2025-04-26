@@ -25,5 +25,15 @@
 - создаем диск images в filesystem
 - создаем route для images, контроллер, конфиг
 - Trait для images
+- DTO  для signUpController (потому что данные могут прийти не только как реквест, а еще как нибудь иначе)
+- value object для цены
+- cats для этого value object, чтобы в модели кастить цену сразу
+- свои queryBuilders вместо scope
+- оптимизациия viewMOdel (там кешируем). Трабл с правами при сбросе кеша через shop:refresh
+- menu (классы). добавляем его во view composer (ViewServiceProvider). Создать view/composers/navigationcomposer
+- оптимизациия индексы на поля по которым фильтруем
+- filters в domain/catalog
+ 
 
+- опубликовать блейды по пагинации php artisan vendor:publish --tag=laravel-pagination
 # deploy

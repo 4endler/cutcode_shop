@@ -30,6 +30,6 @@ class AuthServiceProvider extends ServiceProvider
 
     public function registerRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../Routes/web.php');
+        $this->loadRoutesFrom(base_path('routes/Auth/web.php'));
     }
 }

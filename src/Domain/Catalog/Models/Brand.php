@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Catalog\Models;
 
-use App\Traits\Models\HasSlug;
-use App\Traits\Models\HasThumbnail;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Product;
+use Database\Factories\BrandFactory;
+use Domain\Catalog\QueryBuilders\BrandQueryBuilder;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,13 +22,17 @@ class Brand extends Model
         'slug', 'title', 'thumbnail',
         'on_home_page', 'rank',
     ];
+    protected static function newFactory()
+    {
+        return BrandFactory::new();
+    }
     protected function thumbnailDir(): string
     {
         return 'brands';
     }
-    public function scopeHomePage(Builder $query)
+    public function newEloquentBuilder($query): BrandQueryBuilder
     {
-        $query->where('on_home_page', true)->orderBy('rank')->limit(6);
+        return new BrandQueryBuilder($query);
     }
 
     public function products(): HasMany
@@ -33,3 +40,4 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 }
+
