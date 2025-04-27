@@ -15,7 +15,7 @@ final class Price implements Stringable
     public function __construct(
         private readonly int $value,
         private readonly string $currency = 'RUB',
-        private readonly int $precision = 100
+        private readonly int $precision = 1
     ) {
         if ($value < 0) {
             throw new \InvalidArgumentException('Price value cannot be negative');
@@ -44,6 +44,6 @@ final class Price implements Stringable
     }
     public function __toString(): string
     {
-        return number_format($this->value(), 2, ',', ' ') . ' ' . $this->symbol();
+        return number_format($this->value(), 0, ',', ' ') . ' ' . $this->symbol();
     }
 }

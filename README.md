@@ -32,7 +32,10 @@
 - оптимизациия viewMOdel (там кешируем). Трабл с правами при сбросе кеша через shop:refresh
 - menu (классы). добавляем его во view composer (ViewServiceProvider). Создать view/composers/navigationcomposer
 - оптимизациия индексы на поля по которым фильтруем
-- filters в domain/catalog
+- filters в domain/catalog. Отдельный сервис провайдер для фильтров. Хелпер - получить все фильтры. Не забыть подключить провайдер в providers
+- Просмотренные товары (productController)
+- вид списка каталога (плитка - список) через мидлвар CatalogViewMiddleware
+- сортировка (класс Sorter), подключение в CatalogServiceProvider
  
 
 - опубликовать блейды по пагинации php artisan vendor:publish --tag=laravel-pagination

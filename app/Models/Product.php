@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Pipeline\Pipeline;
 
 class Product extends Model
 {
@@ -24,13 +26,16 @@ class Product extends Model
         'on_home_page', 'rank',
     ];
 
-    public function scopeFiltered(Builder $query, array $filters) 
+    public function scopeFiltered(Builder $query) 
     {
-        
+        return app(Pipeline::class)
+            ->send($query)
+            ->through(filters())
+            ->thenReturn();
     }
-    public function scopeSorted(Builder $query, array $filters) 
+    public function scopeSorted(Builder $query) 
     {
-
+        sorter()->run($query);
     }
     protected function thumbnailDir(): string
     {
@@ -49,6 +54,17 @@ class Product extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function properties(): BelongsToMany
+    {
+        return $this->BelongsToMany(Property::class)
+            ->withPivot('value');
+    }
+
+    public function optionValues(): BelongsToMany
+    {
+        return $this->belongsToMany(OptionValue::class);
     }
 
     protected $casts =[

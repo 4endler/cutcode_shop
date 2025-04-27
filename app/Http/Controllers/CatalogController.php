@@ -13,14 +13,15 @@ class CatalogController extends Controller
     public function __invoke(?Category $category)
     {
         $categories = Category::query()->select('id', 'title','slug')->has('products')->get();
-        $brands = Brand::query()->select('id', 'title')->has('products')->get();
         $products = Product::query()
             ->select('id', 'title', 'thumbnail', 'price','slug')
+            ->filtered()
+            ->sorted()
             ->when($category->exists, function (Builder $query) use ($category) {
                 $query->whereRelation('categories', 'categories.id', $category->id);
             })
             ->paginate(6);
         // logger()->channel('telegram')->info('homepage');
-        return view('catalog.index', compact('categories', 'brands','products', 'category'));
+        return view('catalog.index', compact('categories','products', 'category'));
     }
 }
