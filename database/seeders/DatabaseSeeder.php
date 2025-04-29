@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-
-use App\Models\Product;
+use Database\Factories\CategoryFactory;
+use Domain\Product\Models\Product;
 use Database\Factories\OptionFactory;
 use Database\Factories\OptionValueFactory;
+use Database\Factories\ProductFactory;
 use Database\Factories\PropertyFactory;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
@@ -24,8 +25,8 @@ class DatabaseSeeder extends Seeder
 
         OptionFactory::new()->count(3)->create();
         $optionValues = OptionValueFactory::new()->count(10)->create();
-        Category::factory(20)
-            ->has(Product::factory(rand(2,3))
+        CategoryFactory::new()->count(10)
+            ->has(ProductFactory::new()->count(rand(2,3))
                 ->hasAttached($optionValues)
                 ->hasAttached($properties, function(){
                         return [

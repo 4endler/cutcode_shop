@@ -9,7 +9,7 @@ abstract class AbstractFilter
     public function __invoke(Builder $query, $next) //Для того, чтобы можно было пропустить filter через Pipeline
     {
         $this->apply($query);
-        $next($query);
+        return $next($query);
     }
 
     abstract public function title(): string;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,17 +14,11 @@ class ProductController extends Controller
         //добавляем опцию, чтобы не заргужать отдельно
         $product->load('optionValues.option');
 
-        $options = $product->optionValues->mapToGroups(function ($item, $key) {
-            return [
-                $item->option->title => $item
-            ];
-        });
-
         $this->addToSeenProducts($product->id);
 
         return view('product.show', [
             'product' => $product,
-            'options' => $options,
+            'options' => $product->optionValues->keyValues(),
             'seenProducts' => $this->getSeenProducts($product->id)
         ]);
     }

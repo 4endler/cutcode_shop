@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Catalog\Models\Brand;
-use Domain\Catalog\Models\Category;
-use App\Models\Product;
 use Domain\Catalog\ViewModels\BrandViewModel;
 use Domain\Catalog\ViewModels\CategoryViewModel;
-use Illuminate\Http\Request;
+use Domain\Product\Models\Product;
 
 class HomeController extends Controller
 {

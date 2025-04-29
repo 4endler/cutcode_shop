@@ -2,9 +2,9 @@
 
 namespace Domain\Catalog\Models;
 
-use App\Models\Product;
 use Database\Factories\BrandFactory;
 use Domain\Catalog\QueryBuilders\BrandQueryBuilder;
+use Domain\Product\Models\Product;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
 use Illuminate\Database\Eloquent\Builder;
