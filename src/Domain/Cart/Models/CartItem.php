@@ -38,7 +38,7 @@ class CartItem extends Model
     }
     public function product():BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(config('cart.product_model'));
     }
     public function optionValues():BelongsToMany
     {

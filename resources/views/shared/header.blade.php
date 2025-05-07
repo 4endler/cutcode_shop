@@ -3,7 +3,7 @@
         <div class="header-inner flex items-center justify-between lg:justify-start">
             <div class="header-logo shrink-0">
                 <a href="{{route('home')}}" rel="home">
-                    <img src="{{Vite::image('/logo.png')}}" class="w-12 h12 rounded-[10px]" alt="myshop">
+                    <img src="{{Vite::image('logo.png')}}" class="w-12 h12 rounded-[10px]" alt="myshop">
                 </a>
             </div><!-- /.header-logo -->
             <div class="header-menu grow hidden lg:flex items-center ml-8 mr-8 gap-8">

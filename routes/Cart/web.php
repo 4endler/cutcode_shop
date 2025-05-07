@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\SignUpController;
-use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AfterSessionRegenerated;
 use App\Listeners\SendEmailNewUserListener;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -25,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+       
+        Event::listen(AfterSessionRegenerated::class, function(AfterSessionRegenerated $event){
+            cart()->updateStorageId($event->oldSessionId, $event->newSessionId);
+        });
     }
 }

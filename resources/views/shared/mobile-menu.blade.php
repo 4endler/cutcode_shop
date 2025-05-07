@@ -3,7 +3,7 @@
 		<div class="mmenu-heading flex items-center pt-6 xl:pt-12">
 			<div class="shrink-0 grow">
 				<a href="{{route('home')}}" rel="home">
-					<img src="{{Vite::image('/logo.png')}}" class="w-[50px] md:w-[50px] h-[50px] md:h-[50px]" alt="shop">
+					<img src="{{Vite::image('logo.png')}}" class="w-[50px] md:w-[50px] h-[50px] md:h-[50px]" alt="shop">
 				</a>
 			</div>
 			<div class="shrink-0 flex items-center">
@@ -49,11 +49,11 @@
 			</nav>
 			<div class="flex flex-wrap items-center space-x-6 mt-8">
 				<a href="#" class="inline-flex items-center text-darkblue hover:text-purple" target="_blank" rel="nofollow noopener">
-					<img class="h-5 lg:h-6" src="{{Vite::image('/icons/youtube.svg')}}" alt="YouTube">
+					<img class="h-5 lg:h-6" src="{{Vite::image('icons/youtube.svg')}}" alt="YouTube">
 					<span class="ml-2 lg:ml-3 text-xxs font-semibold">YouTube</span>
 				</a>
 				<a href="#" class="inline-flex items-center text-darkblue hover:text-purple" target="_blank" rel="nofollow noopener">
-					<img class="h-5 lg:h-6" src="{{Vite::image('/icons/telegram.svg')}}" alt="Telegram">
+					<img class="h-5 lg:h-6" src="{{Vite::image('icons/telegram.svg')}}" alt="Telegram">
 					<span class="ml-2 lg:ml-3 text-xxs font-semibold">Telegram</span>
 				</a>
 			</div>

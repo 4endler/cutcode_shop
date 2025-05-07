@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInFormRequest;
+use Support\SessionRegenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,13 +20,24 @@ class SignInController extends Controller
     }
     public function handle(SignInFormRequest $request): RedirectResponse
     {   
-        if (!Auth::attempt($request->validated())) {
+        $credentials = $request->validated();
+        // $remember = $request->has('remember');
+        
+        // Проверяем credentials без автоматического логина, чтобы не изменять сессию
+        if (!Auth::validate($credentials)) {
             return back()->withErrors([
-                'email'=>'Неправильный логин или пароль'
+                'email' => 'Неправильный логин или пароль'
             ])->onlyInput('email');
         }
         
-        $request->session()->regenerate();
+        // Получаем пользователя
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+        // dd($user);
+        // Кастомная обработка сессии
+        SessionRegenerator::run(function() use ($user) {
+            Auth::login($user);
+        });
+
 
         return redirect()->intended(route('home'));
     }
@@ -33,9 +45,9 @@ class SignInController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken(); 
+        SessionRegenerator::run(function() {
+            Auth::logout();
+        });
 
         return redirect()->route('home');
     }

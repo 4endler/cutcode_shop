@@ -26,6 +26,7 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
+            $table->unsignedInteger('quantity')->default(0);
             $table->timestamps();
 
             // Добавляем полнотекстовый индекс

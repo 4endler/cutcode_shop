@@ -5,6 +5,7 @@ namespace Domain\Cart;
 use Domain\Cart\Contracts\CartIdentityStorageContract;
 use Domain\Cart\Models\Cart;
 use Domain\Cart\Models\CartItem;
+use Domain\Cart\StorageIdentities\FakeSessionIdentityStorage;
 use Domain\Product\Models\Product;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,11 @@ final class CartManager
         protected CartIdentityStorageContract $identityStorage
     )
     {
+    }
+
+    public static function fake(): void
+    {
+        app()->bind(CartIdentityStorageContract::class, FakeSessionIdentityStorage::class);
     }
     private function cacheKey(): string
     {
@@ -88,7 +94,9 @@ final class CartManager
 
     public function truncate():void
     {
-        $this->get()?->delete();
+        if ($this->get()) {
+            $this->get()->delete();
+        }
 
         $this->forgetCache();
     }
@@ -100,7 +108,7 @@ final class CartManager
             return collect([]);
         }
         return CartItem::query()
-            ->with(['product:id','optionValues.option'])
+            ->with(['product:id,title,slug,thumbnail,quantity','optionValues.option'])
             ->whereBelongsTo($this->get())
             ->get();
     }
@@ -138,14 +146,26 @@ final class CartManager
     public function get()
     {
         return Cache::remember($this->cacheKey(), now()->addHour(), function(){
-            return Cart::query()
-            // ->with('cartItems')
-            ->where('storage_id', $this->identityStorage->get())
-            ->when(Auth::check(), fn(Builder $query) => $query->orWhere('user_id',Auth::id()))
-            ->first() ?? false;
+            $cart = Cart::query();
+
+            if (Auth::check()) {
+                $cart->where('user_id', Auth::id());
+            } else {
+                $cart->where('storage_id', $this->identityStorage->get());
+            }
+            return $cart->first() ?? false;
             //если cart query возвращает null (когда корзина пустая) и null в кеш не сохраняется,
             //поэтому чтобы не дергать постоянно запросы на пустую корзину возвращаем false
             //false в кеш сохраняется
         });
+    }
+
+    public function updateStorageId(string $oldId, string $newId):void
+    {
+        // dd($oldId, $newId, $this->storedData($newId));
+        Cart::query()
+            ->where('storage_id', $oldId)
+            ->update($this->storedData($newId));
+        
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Observers\BrandObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::shouldBeStrict(!app()->isProduction());
-
+        Brand::observe(BrandObserver::class);
         // TODO
         // if(app()->isProduction()) {
         if (1) {

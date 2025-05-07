@@ -25,7 +25,7 @@ class Product extends Model
 
     protected $fillable = [
         'slug', 'title','brand_id', 'thumbnail', 'price',
-        'on_home_page', 'rank','json_properties'
+        'on_home_page', 'rank','json_properties','quantity'
     ];
 
     protected $casts =[
@@ -68,7 +68,7 @@ class Product extends Model
 
     public function properties(): BelongsToMany
     {
-        return $this->BelongsToMany(Property::class)
+        return $this->belongsToMany(Property::class)
             ->withPivot('value');
     }
 
@@ -76,7 +76,7 @@ class Product extends Model
     {
         return $this->belongsToMany(OptionValue::class);
     }
-    public function getPropertiesAttribute()
+    public function getFormattedPropertiesAttribute()
     {
         if (empty($this->json_properties)) {
             // Если свойства не закешированы, получаем их из БД

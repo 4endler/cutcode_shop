@@ -19,4 +19,14 @@ class Property extends Model
     {
         return new PropertyCollection($models);
     }
+    
+    //для норм работы в moonShine
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'value' => $this->pivot->value ?? null // для pivot данных
+        ];
+    }
 }

@@ -33,6 +33,11 @@ class CartController extends Controller
     }
     public function quantity(CartItem $item): RedirectResponse
     {
+        if (request('quantity') <= 0) {
+            flash()->alert('Количество товара не может быть меньше или равно 0');
+            return redirect()
+                ->intended(route('cart'));
+        }
         cart()->quantity(
             $item,
             request('quantity', 1)
